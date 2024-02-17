@@ -36,11 +36,11 @@ public class Card extends Auditing {
     private String name;
     @CardNumber
     private String cardNumber;
+    //todo expiryDate is String and write regex for it(XX/XX)
     private LocalDate expiryDate;
     @Enumerated(EnumType.STRING)
-    @NotNull
     private CardType cardType;
-    private boolean isMain;
+    private Boolean isMain;
     private Short cvv;
     @Balance
     private BigDecimal balance;

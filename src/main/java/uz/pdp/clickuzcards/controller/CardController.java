@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import uz.pdp.clickuzcards.dto.AddCardDto;
 import uz.pdp.clickuzcards.dto.CardDto;
-import uz.pdp.clickuzcards.dto.responce.SuccessResponse;
+import uz.pdp.clickuzcards.dto.responce.Response;
 import uz.pdp.clickuzcards.model.enums.CardType;
 import uz.pdp.clickuzcards.service.CardService;
 
@@ -35,18 +35,15 @@ public class CardController {
     public ResponseEntity<?> updateCard(@RequestBody CardDto cardDto) {
         return ResponseEntity.ok(cardService.update(cardDto));
     }
-
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<SuccessResponse> delete(@PathVariable Long id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id) {
         cardService.delete(id);
-        return ResponseEntity.ok(new SuccessResponse("Card deleted"));
+        return ResponseEntity.ok(new Response("Card deleted"));
     }
-
     @GetMapping("/{id}")
     public ResponseEntity<CardDto> getById(@PathVariable Long id) {
         return ResponseEntity.ok(cardService.getById(id));
     }
-
     @GetMapping("/all")
     public ResponseEntity<List<CardDto>> getAll() {
         return ResponseEntity.ok(cardService.getAll());
@@ -57,6 +54,7 @@ public class CardController {
         return ResponseEntity.ok(cardService.getAllByExpiryDate(expiryDate));
     }
 
+    //todo write logic for card type in string
     @GetMapping("/all/cardType/{cardType}")
     public ResponseEntity<List<CardDto>> getAllByExpiryDate(@PathVariable CardType cardType) {
         return ResponseEntity.ok(cardService.getAllByCardType(cardType));
@@ -67,9 +65,10 @@ public class CardController {
         return ResponseEntity.ok(cardService.getByCardNumber(cardNumber));
     }
 
+    //todo add SetBalanceDto
     @PostMapping("/setBalance/{balance}/to/{id}")
-    public ResponseEntity<SuccessResponse> setBalance(@PathVariable Long id, @PathVariable BigDecimal balance) {
+    public ResponseEntity<?> setBalance(@PathVariable Long id, @PathVariable BigDecimal balance) {
         cardService.setBalance(id, balance);
-        return ResponseEntity.ok(new SuccessResponse("Balance set"));
+        return ResponseEntity.ok(new Response("Balance set"));
     }
 }

@@ -1,12 +1,13 @@
-package uz.pdp.clickuzcards.dto;
+package uz.pdp.clickuzcards.dto.responce;
 
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 public class Response {
-    private final LocalDate timestamp = LocalDate.now();
+    private final LocalDateTime timestamp = LocalDateTime.now();
     private final String message;
 
     public Response(String message) {

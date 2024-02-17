@@ -2,6 +2,7 @@ package uz.pdp.clickuzcards.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 import uz.pdp.clickuzcards.dto.AddCardDto;
 import uz.pdp.clickuzcards.dto.CardDto;
 import uz.pdp.clickuzcards.exception.AlreadyExistsException;
@@ -17,6 +18,7 @@ import uz.pdp.clickuzcards.util.Validator;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,7 +26,7 @@ public class CardServiceImpl implements CardService {
     private final CardRepository cardRepository;
 
     @Override
-    public Card create(AddCardDto addCardDto) {
+    public CardDto create(AddCardDto addCardDto) {
         if (addCardDto == null)
             throw new NotFoundException("Card");
         if (addCardDto.getId() != null) {
@@ -33,10 +35,16 @@ public class CardServiceImpl implements CardService {
         }
         if (Validator.isNullOrEmpty(addCardDto.getCardNumber()))
             throw new NullOrEmptyException("Card number");
-        if (cardRepository.findByCardNumber(addCardDto.getCardNumber()).isPresent())
-            throw new AlreadyExistsException("This card number");
+        if (addCardDto.getCardNumber() != null){
+            if (cardRepository.findByCardNumber(addCardDto.getCardNumber()).isPresent())
+                throw new AlreadyExistsException("This card number");
+        }
         if (addCardDto.getExpiryDate() == null)
             throw new NullOrEmptyException("Card expiry date");
+        if (addCardDto.getExpiryDate().isBefore(LocalDate.now()))
+            throw new InvalidArgumentException("Expiry date");
+        if (addCardDto.getCardType() == null)
+            throw new NullOrEmptyException("Card Type");
         if (addCardDto.getCardType().equals(CardType.VISA)) {
             if (addCardDto.getCvv() == null)
                 throw new NullOrEmptyException("Card cvv");
@@ -44,36 +52,21 @@ public class CardServiceImpl implements CardService {
             if (addCardDto.getCvv() != null)
                 throw new InvalidArgumentException("Card cvv");
         }
-
-        return cardRepository.save(convertToEntity(addCardDto));
+        return new CardDto(cardRepository.save(convertToEntity(addCardDto)));
     }
 
     @Override
-    public Card update(CardDto cardDto) {
+    public CardDto update(CardDto cardDto) {
         if (cardDto == null)
             throw new NotFoundException("Card");
         if (cardDto.getId() == null)
             throw new NullOrEmptyException("Card id");
-
         Card existingCard = cardRepository.findById(cardDto.getId())
                 .orElseThrow(() -> new NotFoundException("Card"));
-
-        boolean updatedIsMain = cardDto.isMain() != existingCard.isMain() ? cardDto.isMain() : existingCard.isMain();
-
-        Card updateCard = Card.builder()
-                .id(existingCard.getId())
-                .name(Validator.requireNonNullElse(cardDto.getName(), existingCard.getName()))
-                .cardNumber(Validator.requireNonNullElse(cardDto.getCardNumber(), existingCard.getCardNumber()))
-                .expiryDate(Validator.requireNonNullElse(cardDto.getExpiryDate(), existingCard.getExpiryDate()))
-                .cardType(Validator.requireNonNullElse(cardDto.getCardType(), existingCard.getCardType()))
-                .cvv(Validator.requireNonNullElse(cardDto.getCvv(), existingCard.getCvv()))
-                .balance(Validator.requireNonNullElse(cardDto.getBalance(), existingCard.getBalance()))
-                .isMain(updatedIsMain)
-                .build();
-
-        cardRepository.save(updateCard);
-
-        return convertToEntity(cardDto);
+        Boolean isMain = cardDto.getIsMain() == null ? existingCard.getIsMain() : cardDto.getIsMain();
+        existingCard.setName(Validator.requireNonNullElse(cardDto.getName(),existingCard.getName()));
+        existingCard.setIsMain(isMain == existingCard.getIsMain() ? existingCard.getIsMain() : isMain);
+        return new CardDto(cardRepository.save(existingCard));
     }
 
     @Override
@@ -150,7 +143,7 @@ public class CardServiceImpl implements CardService {
                 .cardNumber(cardDto.getCardNumber())
                 .expiryDate(cardDto.getExpiryDate())
                 .cardType(cardDto.getCardType())
-                .isMain(cardDto.isMain())
+                .isMain(cardDto.getIsMain())
                 .cvv(cardDto.getCvv())
                 .balance(cardDto.getBalance())
                 .build();
@@ -164,6 +157,7 @@ public class CardServiceImpl implements CardService {
                 .expiryDate(addCardDto.getExpiryDate())
                 .cardType(addCardDto.getCardType())
                 .isMain(addCardDto.isMain())
+                .balance(new BigDecimal(300000))
                 .cvv(addCardDto.getCvv())
                 .build();
     }

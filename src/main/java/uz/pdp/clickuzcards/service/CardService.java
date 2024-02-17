@@ -12,8 +12,8 @@ import java.util.List;
 
 @Service
 public interface CardService {
-    Card create(AddCardDto addCardDto);
-    Card update(CardDto cardDto);
+    CardDto create(AddCardDto addCardDto);
+    CardDto update(CardDto cardDto);
     void delete(Long id);
     CardDto getById(Long id);
     List<CardDto> getAll();

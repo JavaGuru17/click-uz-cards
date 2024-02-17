@@ -3,7 +3,7 @@ package uz.pdp.clickuzcards.handler;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import uz.pdp.clickuzcards.dto.Response;
+import uz.pdp.clickuzcards.dto.responce.Response;
 import uz.pdp.clickuzcards.exception.AlreadyExistsException;
 import uz.pdp.clickuzcards.exception.InvalidArgumentException;
 import uz.pdp.clickuzcards.exception.NotFoundException;

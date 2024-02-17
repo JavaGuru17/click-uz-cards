@@ -27,7 +27,6 @@ public class AddCardDto {
     private String cardNumber;
     private LocalDate expiryDate;
     @Enumerated(EnumType.STRING)
-    @NotNull
     private CardType cardType;
     private boolean isMain;
     private Short cvv;

@@ -30,19 +30,18 @@ public class CardDto {
     private String cardNumber;
     private LocalDate expiryDate;
     @Enumerated(EnumType.STRING)
-    @NotNull
     private CardType cardType;
-    private boolean isMain;
+    private Boolean isMain;
     private Short cvv;
     @Balance
     private BigDecimal balance;
-
     public CardDto(Card card) {
         this.id = card.getId();
         this.name = card.getName();
         this.cardNumber = card.getCardNumber();
         this.expiryDate = card.getExpiryDate();
-        this.isMain = card.isMain();
+        this.cardType = card.getCardType();
+        this.isMain = card.getIsMain();
         this.cvv = card.getCvv();
         this.balance = card.getBalance();
     }
