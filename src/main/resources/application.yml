@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/click_uz_cards
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: 123321
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
