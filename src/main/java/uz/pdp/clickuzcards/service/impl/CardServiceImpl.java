@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import uz.pdp.clickuzcards.dto.AddCardDto;
 import uz.pdp.clickuzcards.dto.CardDto;
+import uz.pdp.clickuzcards.dto.SetBalanceDto;
 import uz.pdp.clickuzcards.exception.AlreadyExistsException;
 import uz.pdp.clickuzcards.exception.InvalidArgumentException;
 import uz.pdp.clickuzcards.exception.NotFoundException;
@@ -122,17 +123,14 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    public void setBalance(Long id, BigDecimal balance) {
-        if (balance == null)
+    public void setBalance(SetBalanceDto setBalanceDto) {
+        if (setBalanceDto.getBalance() == null)
             throw new NullOrEmptyException("Balance");
-        if (balance.compareTo(BigDecimal.ZERO) < 0)
+        if (setBalanceDto.getBalance().compareTo(BigDecimal.ZERO) < 0)
             throw new InvalidArgumentException("Balance");
-
-        Card card = cardRepository.findById(id)
+        Card card = cardRepository.findById(setBalanceDto.getCardId())
                 .orElseThrow(() -> new NotFoundException("Card id"));
-
-        card.setBalance(balance);
-
+        card.setBalance(setBalanceDto.getBalance());
         cardRepository.save(card);
     }
 
