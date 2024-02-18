@@ -6,7 +6,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,10 +15,11 @@ import lombok.ToString;
 import uz.pdp.clickuzcards.model.enums.CardType;
 import uz.pdp.clickuzcards.util.annotations.Balance;
 import uz.pdp.clickuzcards.util.annotations.CardNumber;
+import uz.pdp.clickuzcards.util.annotations.Cvv;
+import uz.pdp.clickuzcards.util.annotations.ExpiryDate;
 import uz.pdp.clickuzcards.util.annotations.Length;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -36,12 +36,13 @@ public class Card extends Auditing {
     private String name;
     @CardNumber
     private String cardNumber;
-    //todo expiryDate is String and write regex for it(XX/XX)
-    private LocalDate expiryDate;
+    @ExpiryDate
+    private String expiryDate;
     @Enumerated(EnumType.STRING)
     private CardType cardType;
     private Boolean isMain;
-    private Short cvv;
+    @Cvv
+    private String cvv;
     @Balance
     private BigDecimal balance;
 }

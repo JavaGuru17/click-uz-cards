@@ -15,11 +15,8 @@ import uz.pdp.clickuzcards.dto.AddCardDto;
 import uz.pdp.clickuzcards.dto.CardDto;
 import uz.pdp.clickuzcards.dto.SetBalanceDto;
 import uz.pdp.clickuzcards.dto.responce.Response;
-import uz.pdp.clickuzcards.model.enums.CardType;
 import uz.pdp.clickuzcards.service.CardService;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -51,20 +48,18 @@ public class CardController {
     }
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/all/expiryDate/{expiryDate}")
-    public ResponseEntity<List<CardDto>> getAllByExpiryDate(@PathVariable LocalDate expiryDate) {
+    public ResponseEntity<List<CardDto>> getAllByExpiryDate(@PathVariable String expiryDate) {
         return ResponseEntity.ok(cardService.getAllByExpiryDate(expiryDate));
     }
-    //todo write logic for card type in string
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/all/cardType/{cardType}")
-    public ResponseEntity<List<CardDto>> getAllByExpiryDate(@PathVariable CardType cardType) {
+    public ResponseEntity<List<CardDto>> getAllByCardType(@PathVariable String cardType) {
         return ResponseEntity.ok(cardService.getAllByCardType(cardType));
     }
     @GetMapping("/cardNumber/{cardNumber}")
     public ResponseEntity<CardDto> getByCardNumber(@PathVariable String cardNumber) {
         return ResponseEntity.ok(cardService.getByCardNumber(cardNumber));
     }
-    //todo add SetBalanceDto
     @PostMapping("/balance")
     public ResponseEntity<?> setBalance(@RequestBody SetBalanceDto setBalanceDto) {
         cardService.setBalance(setBalanceDto);

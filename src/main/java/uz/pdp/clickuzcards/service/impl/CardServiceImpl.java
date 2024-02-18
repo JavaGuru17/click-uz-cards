@@ -2,7 +2,6 @@ package uz.pdp.clickuzcards.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 import uz.pdp.clickuzcards.dto.AddCardDto;
 import uz.pdp.clickuzcards.dto.CardDto;
 import uz.pdp.clickuzcards.dto.SetBalanceDto;
@@ -17,9 +16,7 @@ import uz.pdp.clickuzcards.service.CardService;
 import uz.pdp.clickuzcards.util.Validator;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -40,10 +37,6 @@ public class CardServiceImpl implements CardService {
             if (cardRepository.findByCardNumber(addCardDto.getCardNumber()).isPresent())
                 throw new AlreadyExistsException("This card number");
         }
-        if (addCardDto.getExpiryDate() == null)
-            throw new NullOrEmptyException("Card expiry date");
-        if (addCardDto.getExpiryDate().isBefore(LocalDate.now()))
-            throw new InvalidArgumentException("Expiry date");
         if (addCardDto.getCardType() == null)
             throw new NullOrEmptyException("Card Type");
         if (addCardDto.getCardType().equals(CardType.VISA)) {
@@ -98,17 +91,17 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    public List<CardDto> getAllByExpiryDate(LocalDate expiryDate) {
+    public List<CardDto> getAllByExpiryDate(String expiryDate) {
         if (expiryDate == null)
             throw new NullOrEmptyException("Expiry date");
         return cardRepository.findAllByExpiryDate(expiryDate).stream().map(CardDto::new).toList();
     }
 
     @Override
-    public List<CardDto> getAllByCardType(CardType cardType) {
-        if (cardType == null)
+    public List<CardDto> getAllByCardType(String cardType) {
+        if (Validator.isNullOrEmpty(cardType))
             throw new NullOrEmptyException("Card type");
-        return cardRepository.findAllByCardType(cardType).stream().map(CardDto::new).toList();
+        return cardRepository.findAllByCardType(CardType.valueOf(cardType.toUpperCase())).stream().map(CardDto::new).toList();
     }
 
     @Override
@@ -134,19 +127,6 @@ public class CardServiceImpl implements CardService {
         cardRepository.save(card);
     }
 
-    private Card convertToEntity(CardDto cardDto) {
-        return Card.builder()
-                .id(cardDto.getId())
-                .name(cardDto.getName())
-                .cardNumber(cardDto.getCardNumber())
-                .expiryDate(cardDto.getExpiryDate())
-                .cardType(cardDto.getCardType())
-                .isMain(cardDto.getIsMain())
-                .cvv(cardDto.getCvv())
-                .balance(cardDto.getBalance())
-                .build();
-    }
-
     private Card convertToEntity(AddCardDto addCardDto) {
         return Card.builder()
                 .id(addCardDto.getId())
@@ -154,7 +134,7 @@ public class CardServiceImpl implements CardService {
                 .cardNumber(addCardDto.getCardNumber())
                 .expiryDate(addCardDto.getExpiryDate())
                 .cardType(addCardDto.getCardType())
-                .isMain(addCardDto.isMain())
+                .isMain(addCardDto.getIsMain())
                 .balance(new BigDecimal(300000))
                 .cvv(addCardDto.getCvv())
                 .build();

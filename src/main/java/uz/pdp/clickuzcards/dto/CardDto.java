@@ -2,7 +2,6 @@ package uz.pdp.clickuzcards.dto;
 
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,10 +11,11 @@ import uz.pdp.clickuzcards.model.Card;
 import uz.pdp.clickuzcards.model.enums.CardType;
 import uz.pdp.clickuzcards.util.annotations.Balance;
 import uz.pdp.clickuzcards.util.annotations.CardNumber;
+import uz.pdp.clickuzcards.util.annotations.Cvv;
+import uz.pdp.clickuzcards.util.annotations.ExpiryDate;
 import uz.pdp.clickuzcards.util.annotations.Length;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -28,11 +28,13 @@ public class CardDto {
     private String name;
     @CardNumber
     private String cardNumber;
-    private LocalDate expiryDate;
+    @ExpiryDate
+    private String expiryDate;
     @Enumerated(EnumType.STRING)
     private CardType cardType;
     private Boolean isMain;
-    private Short cvv;
+    @Cvv
+    private String cvv;
     @Balance
     private BigDecimal balance;
     public CardDto(Card card) {

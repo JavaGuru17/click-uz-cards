@@ -1,6 +1,5 @@
 package uz.pdp.clickuzcards.proxy;
 
-
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

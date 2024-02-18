@@ -4,11 +4,7 @@ import org.springframework.stereotype.Service;
 import uz.pdp.clickuzcards.dto.AddCardDto;
 import uz.pdp.clickuzcards.dto.CardDto;
 import uz.pdp.clickuzcards.dto.SetBalanceDto;
-import uz.pdp.clickuzcards.model.Card;
-import uz.pdp.clickuzcards.model.enums.CardType;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -18,8 +14,8 @@ public interface CardService {
     void delete(Long id);
     CardDto getById(Long id);
     List<CardDto> getAll();
-    List<CardDto> getAllByExpiryDate(LocalDate expiryDate);
-    List<CardDto> getAllByCardType(CardType cardType);
+    List<CardDto> getAllByExpiryDate(String expiryDate);
+    List<CardDto> getAllByCardType(String cardType);
     CardDto getByCardNumber(String cardNumber);
     void setBalance(SetBalanceDto setBalanceDto);
 }
