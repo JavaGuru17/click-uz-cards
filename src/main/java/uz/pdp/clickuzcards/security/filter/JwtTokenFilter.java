@@ -12,8 +12,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import uz.pdp.clickuzcards.proxy.TokenProxy;
 import uz.pdp.clickuzcards.security.ClickUzAuthentication;
-import uz.pdp.clickuzpayments.proxy.TokenProxy;
-import uz.pdp.clickuzpayments.security.ClickUzAuthentication;
 
 import java.io.IOException;
 
