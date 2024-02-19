@@ -1,3 +1,4 @@
+
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/click_uz_cards
@@ -14,3 +15,5 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:8741/eureka
+server:
+  port: 4432

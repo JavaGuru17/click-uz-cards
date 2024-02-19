@@ -1,19 +1,12 @@
 package uz.pdp.clickuzcards.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import uz.pdp.clickuzcards.dto.AddCardDto;
 import uz.pdp.clickuzcards.dto.CardDto;
 import uz.pdp.clickuzcards.dto.SetBalanceDto;
+import uz.pdp.clickuzcards.dto.responce.CustomResponseEntity;
 import uz.pdp.clickuzcards.dto.responce.Response;
 import uz.pdp.clickuzcards.service.CardService;
 
@@ -25,44 +18,44 @@ import java.util.List;
 public class CardController {
     private final CardService cardService;
     @PostMapping("/create")
-    public ResponseEntity<?> createCard(@RequestBody AddCardDto addCardDto) {
-        return ResponseEntity.ok(cardService.create(addCardDto));
+    public CustomResponseEntity<?> createCard(@RequestBody AddCardDto addCardDto) {
+        return CustomResponseEntity.ok(cardService.create(addCardDto));
     }
     @PatchMapping("/update")
-    public ResponseEntity<?> updateCard(@RequestBody CardDto cardDto) {
-        return ResponseEntity.ok(cardService.update(cardDto));
+    public CustomResponseEntity<?> updateCard(@RequestBody CardDto cardDto) {
+        return CustomResponseEntity.ok(cardService.update(cardDto));
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable Long id) {
+    public CustomResponseEntity<?> delete(@PathVariable Long id) {
         cardService.delete(id);
-        return ResponseEntity.ok(new Response("Card deleted"));
+        return CustomResponseEntity.ok(new Response("Card deleted"));
     }
     @GetMapping("/{id}")
-    public ResponseEntity<CardDto> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(cardService.getById(id));
+    public CustomResponseEntity<CardDto> getById(@PathVariable Long id) {
+        return CustomResponseEntity.ok(cardService.getById(id));
     }
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/all")
-    public ResponseEntity<List<CardDto>> getAll() {
-        return ResponseEntity.ok(cardService.getAll());
+    public CustomResponseEntity<List<CardDto>> getAll() {
+        return CustomResponseEntity.ok(cardService.getAll());
     }
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/all/expiryDate/{expiryDate}")
-    public ResponseEntity<List<CardDto>> getAllByExpiryDate(@PathVariable String expiryDate) {
-        return ResponseEntity.ok(cardService.getAllByExpiryDate(expiryDate));
+    public CustomResponseEntity<List<CardDto>> getAllByExpiryDate(@PathVariable String expiryDate) {
+        return CustomResponseEntity.ok(cardService.getAllByExpiryDate(expiryDate));
     }
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/all/cardType/{cardType}")
-    public ResponseEntity<List<CardDto>> getAllByCardType(@PathVariable String cardType) {
-        return ResponseEntity.ok(cardService.getAllByCardType(cardType));
+    public CustomResponseEntity<List<CardDto>> getAllByCardType(@PathVariable String cardType) {
+        return CustomResponseEntity.ok(cardService.getAllByCardType(cardType));
     }
     @GetMapping("/cardNumber/{cardNumber}")
-    public ResponseEntity<CardDto> getByCardNumber(@PathVariable String cardNumber) {
-        return ResponseEntity.ok(cardService.getByCardNumber(cardNumber));
+    public CustomResponseEntity<CardDto> getByCardNumber(@PathVariable String cardNumber) {
+        return CustomResponseEntity.ok(cardService.getByCardNumber(cardNumber));
     }
     @PostMapping("/balance")
-    public ResponseEntity<?> setBalance(@RequestBody SetBalanceDto setBalanceDto) {
+    public CustomResponseEntity<?> setBalance(@RequestBody SetBalanceDto setBalanceDto) {
         cardService.setBalance(setBalanceDto);
-        return ResponseEntity.ok(new Response("Balance set"));
+        return CustomResponseEntity.ok(new Response("Balance set"));
     }
 }

@@ -6,10 +6,10 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import uz.pdp.clickuzcards.dto.responce.CustomResponseEntity;
 import uz.pdp.clickuzcards.proxy.TokenProxy;
 import uz.pdp.clickuzcards.security.ClickUzAuthentication;
 
@@ -26,7 +26,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = request.getHeader(AUTHORIZATION);
         if (token != null && token.startsWith(BEARER)) {
-            ResponseEntity<ClickUzAuthentication> verify = tokenProxy.verify(token.split(" ")[1]);
+            CustomResponseEntity<ClickUzAuthentication> verify = tokenProxy.verify(token.split(" ")[1]);
             if (verify.getBody() != null)
                 SecurityContextHolder.getContext().setAuthentication(
                         ClickUzAuthentication.cast(verify.getBody())
