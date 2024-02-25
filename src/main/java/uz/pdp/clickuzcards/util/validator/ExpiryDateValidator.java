@@ -13,7 +13,7 @@ public class ExpiryDateValidator implements ConstraintValidator<ExpiryDate, Stri
         if (date == null)
             return true;
         if (!date.matches("(0[1-9]|1[0-2])/[0-9]{2}"))
-            throw new IllegalArgumentException("Expiry date");
+            throw new InvalidArgumentException("Expiry date");
         String[] split = date.split("/");
         if (LocalDate.now().getYear() > Integer.parseInt("20" + split[1]))
             throw new InvalidArgumentException("Expiry date");

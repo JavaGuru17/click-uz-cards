@@ -134,7 +134,7 @@ public class CardServiceImpl implements CardService {
                 .cardNumber(addCardDto.getCardNumber())
                 .expiryDate(addCardDto.getExpiryDate())
                 .cardType(addCardDto.getCardType())
-                .isMain(addCardDto.getIsMain())
+                .isMain(addCardDto.getIsMain() != null && addCardDto.getIsMain())
                 .balance(new BigDecimal(300000))
                 .cvv(addCardDto.getCvv())
                 .build();

@@ -54,8 +54,7 @@ public class CardController {
         return CustomResponseEntity.ok(cardService.getByCardNumber(cardNumber));
     }
     @PostMapping("/balance")
-    public CustomResponseEntity<?> setBalance(@RequestBody SetBalanceDto setBalanceDto) {
-        cardService.setBalance(setBalanceDto);
-        return CustomResponseEntity.ok(new Response("Balance set"));
+    public void setBalance(@RequestBody SetBalanceDto setBalanceDto) {
+            cardService.setBalance(setBalanceDto);
     }
 }
